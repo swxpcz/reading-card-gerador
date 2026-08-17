@@ -1,40 +1,27 @@
 const titleInput = document.getElementById("title");
-
 const progressInput = document.getElementById("progress");
-
 const blurInput = document.getElementById("blur");
-
 const coverInput = document.getElementById("cover");
-
 const formatInput = document.getElementById("format");
 
-
 const titlePreview = document.getElementById("titlePreview");
-
 const progressValue = document.getElementById("progressValue");
-
 const blurValue = document.getElementById("blurValue");
-
 const percentPreview = document.getElementById("percentPreview");
-
 const progressBar = document.getElementById("progressBar");
 
 const coverPreview = document.getElementById("coverPreview");
-
 const coverPlaceholder = document.getElementById("coverPlaceholder");
-
 const background = document.getElementById("background");
-
 const previewFrame = document.getElementById("previewFrame");
 
 const downloadStatus = document.getElementById("downloadStatus");
-
 
 let coverData = null;
 
 
 /* =========================
-   ATUALIZAÇÃO DA PRÉVIA
+   PRÉVIA
 ========================= */
 
 function updatePreview() {
@@ -60,18 +47,11 @@ function updatePreview() {
   progressBar.style.width =
     `${progress}%`;
 
-
   blurValue.textContent =
     `${blur}px`;
 
-
-  /*
-     O desfoque da prévia.
-  */
-
   background.style.filter =
     `blur(${blur}px)`;
-
 }
 
 
@@ -105,27 +85,24 @@ formatInput.addEventListener(
   "change",
   () => {
 
-    const story =
+    const isStory =
       formatInput.value === "story";
-
 
     previewFrame.classList.toggle(
       "story",
-      story
+      isStory
     );
-
 
     previewFrame.classList.toggle(
       "square",
-      !story
+      !isStory
     );
-
   }
 );
 
 
 /* =========================
-   CAPA
+   UPLOAD DA CAPA
 ========================= */
 
 coverInput.addEventListener(
@@ -134,7 +111,6 @@ coverInput.addEventListener(
 
     const file =
       coverInput.files[0];
-
 
     if (!file) {
       return;
@@ -177,7 +153,7 @@ coverInput.addEventListener(
 
 
 /* =========================
-   LIMPAR
+   RESET
 ========================= */
 
 document
@@ -237,10 +213,6 @@ async function generatePNG() {
 
   try {
 
-    /*
-       Tamanho final real da imagem.
-    */
-
     const width = 1080;
 
     const isStory =
@@ -268,11 +240,14 @@ async function generatePNG() {
 
 
     /*
-       FUNDO BASE
+    ========================================
+    FUNDO BASE
+    ========================================
     */
 
     ctx.fillStyle =
       "#26221f";
+
 
     ctx.fillRect(
       0,
@@ -283,7 +258,9 @@ async function generatePNG() {
 
 
     /*
-       CARREGA A CAPA
+    ========================================
+    CARREGAR CAPA
+    ========================================
     */
 
     let image = null;
@@ -300,59 +277,44 @@ async function generatePNG() {
 
 
     /*
-       FUNDO DESFOCADO
+    ========================================
+    FUNDO DESFOCADO
 
-       Aqui está a principal correção.
+    Não usamos mais:
 
-       O blur é aplicado diretamente
-       no Canvas, então ele aparece
-       também no PNG.
+    ctx.filter = blur()
+
+    porque alguns celulares não
+    exportam esse efeito corretamente.
+
+    Em vez disso fazemos um blur
+    visual diretamente no canvas.
+    ========================================
     */
 
     if (image) {
 
       const blur =
-        Number(blurInput.value);
+        Number(
+          blurInput.value
+        );
 
 
-      ctx.save();
-
-
-      /*
-         O valor do slider é convertido
-         para a resolução final.
-      */
-
-      const canvasBlur =
-        blur * (width / 405);
-
-
-      ctx.filter =
-        `blur(${canvasBlur}px)`;
-
-
-      /*
-         Aumentamos o tamanho da imagem
-         para evitar bordas causadas pelo blur.
-      */
-
-      drawImageCover(
+      drawBlurredBackground(
         ctx,
         image,
-        -100,
-        -100,
-        width + 200,
-        height + 200
+        width,
+        height,
+        blur
       );
-
-
-      ctx.restore();
 
     }
 
 
     /*
-       OVERLAY ESCURO
+    ========================================
+    OVERLAY
+    ========================================
     */
 
     const gradient =
@@ -395,7 +357,9 @@ async function generatePNG() {
 
 
     /*
-       CAPA CENTRAL
+    ========================================
+    CAPA CENTRAL
+    ========================================
     */
 
     const coverWidth =
@@ -416,17 +380,16 @@ async function generatePNG() {
 
     if (image) {
 
-      /*
-         Sombra
-      */
-
       ctx.save();
+
 
       ctx.shadowColor =
         "rgba(0,0,0,.35)";
 
+
       ctx.shadowBlur =
         45;
+
 
       ctx.shadowOffsetY =
         15;
@@ -480,7 +443,9 @@ async function generatePNG() {
 
 
     /*
-       TEXTOS
+    ========================================
+    TEXTO
+    ========================================
     */
 
     let y =
@@ -509,7 +474,9 @@ async function generatePNG() {
 
 
     /*
-       TÍTULO
+    ========================================
+    TÍTULO
+    ========================================
     */
 
     y += 70;
@@ -540,7 +507,8 @@ async function generatePNG() {
       82;
 
 
-    lines.slice(0, 3)
+    lines
+      .slice(0, 3)
       .forEach(
         (line, index) => {
 
@@ -555,7 +523,9 @@ async function generatePNG() {
 
 
     /*
-       PROGRESSO
+    ========================================
+    PROGRESSO
+    ========================================
     */
 
     y +=
@@ -566,7 +536,9 @@ async function generatePNG() {
 
 
     const progress =
-      Number(progressInput.value);
+      Number(
+        progressInput.value
+      );
 
 
     const barX =
@@ -616,7 +588,9 @@ async function generatePNG() {
 
 
     /*
-       BARRA
+    ========================================
+    BARRA
+    ========================================
     */
 
     y += 18;
@@ -647,7 +621,9 @@ async function generatePNG() {
 
 
     /*
-       MARCA
+    ========================================
+    MARCA
+    ========================================
     */
 
     ctx.textAlign =
@@ -670,7 +646,9 @@ async function generatePNG() {
 
 
     /*
-       CONVERTE PARA PNG
+    ========================================
+    PNG
+    ========================================
     */
 
     const blob =
@@ -684,16 +662,6 @@ async function generatePNG() {
         blob
       );
 
-
-    /*
-       CELULAR
-
-       Em navegadores móveis, alguns
-       bloqueiam o download automático.
-
-       Por isso o PNG é aberto em uma
-       nova aba como fallback.
-    */
 
     const isMobile =
       /Android|iPhone|iPad|iPod/i
@@ -753,10 +721,6 @@ async function generatePNG() {
     }
 
 
-    /*
-       Libera a memória depois
-    */
-
     setTimeout(
       () => {
 
@@ -775,9 +739,212 @@ async function generatePNG() {
 
 
     downloadStatus.textContent =
-      "Não foi possível gerar o PNG. Tente novamente.";
+      "Não foi possível gerar o PNG.";
 
   }
+
+}
+
+
+/* ==================================================
+   BLUR REAL DO FUNDO
+================================================== */
+
+function drawBlurredBackground(
+  ctx,
+  image,
+  width,
+  height,
+  blur
+) {
+
+  /*
+     Primeiro criamos um canvas menor.
+
+     Isso deixa o processamento do blur
+     muito mais leve no celular.
+  */
+
+  const scale =
+    0.25;
+
+
+  const smallWidth =
+    Math.max(
+      1,
+      Math.round(
+        width * scale
+      )
+    );
+
+
+  const smallHeight =
+    Math.max(
+      1,
+      Math.round(
+        height * scale
+      )
+    );
+
+
+  const smallCanvas =
+    document.createElement(
+      "canvas"
+    );
+
+
+  smallCanvas.width =
+    smallWidth;
+
+
+  smallCanvas.height =
+    smallHeight;
+
+
+  const smallCtx =
+    smallCanvas.getContext(
+      "2d"
+    );
+
+
+  /*
+     Desenhamos a capa reduzida.
+  */
+
+  drawImageCover(
+    smallCtx,
+    image,
+    -30,
+    -30,
+    smallWidth + 60,
+    smallHeight + 60
+  );
+
+
+  /*
+     Quanto maior o valor do slider,
+     mais vezes deslocamos a imagem.
+
+     Isso cria um blur consistente
+     sem depender de ctx.filter.
+  */
+
+  if (blur === 0) {
+
+    ctx.drawImage(
+      smallCanvas,
+      0,
+      0,
+      width,
+      height
+    );
+
+    return;
+
+  }
+
+
+  /*
+     Quantidade de camadas.
+
+     0-10 = 4
+     11-20 = 7
+     21-30 = 10
+     31-45 = 14
+  */
+
+  const layers =
+    Math.max(
+      4,
+      Math.round(
+        4 +
+        blur * 0.22
+      )
+    );
+
+
+  const spread =
+    blur * 2.2;
+
+
+  /*
+     Primeira imagem.
+  */
+
+  ctx.globalAlpha =
+    0.16;
+
+
+  ctx.drawImage(
+    smallCanvas,
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  /*
+     Camadas deslocadas.
+  */
+
+  for (
+    let i = 0;
+    i < layers;
+    i++
+  ) {
+
+    const angle =
+      (
+        Math.PI * 2 * i
+      ) / layers;
+
+
+    const distance =
+      spread;
+
+
+    const offsetX =
+      Math.cos(angle) *
+      distance;
+
+
+    const offsetY =
+      Math.sin(angle) *
+      distance;
+
+
+    ctx.drawImage(
+      smallCanvas,
+      offsetX,
+      offsetY,
+      width,
+      height
+    );
+
+  }
+
+
+  /*
+     Mais uma camada central
+     para preencher o fundo.
+  */
+
+  ctx.globalAlpha =
+    0.45;
+
+
+  ctx.drawImage(
+    smallCanvas,
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  ctx.globalAlpha =
+    1;
 
 }
 
@@ -789,7 +956,10 @@ async function generatePNG() {
 function loadImage(src) {
 
   return new Promise(
-    (resolve, reject) => {
+    (
+      resolve,
+      reject
+    ) => {
 
       const image =
         new Image();
@@ -813,7 +983,7 @@ function loadImage(src) {
 
 
 /* =========================
-   PREENCHE O ESPAÇO
+   COVER
 ========================= */
 
 function drawImageCover(
