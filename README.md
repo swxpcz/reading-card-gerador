@@ -1,4 +1,4 @@
-# Reading Card
+# Template de Leitura | Criado por Lucas Menegon
 
 Gerador simples de templates para compartilhar a leitura atual.
 
