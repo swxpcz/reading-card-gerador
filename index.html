@@ -4,91 +4,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Template de Leitura</title>
+
+  <title>Template de Leitura | Por Lucas Menegon</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
     rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
   <main class="app">
+
     <section class="intro">
+
       <p class="eyebrow">TEMPLATE DE LEITURA</p>
-      <h1>Crie um template<br>da sua leitura.</h1>
-      <p class="description">Adicione a capa, informe o progresso e gere uma imagem pronta para compartilhar onde
-        quiser.</p>
+
+      <h1>
+        Crie um template<br>
+        da sua leitura.
+      </h1>
+
+      <p class="description">
+        Adicione a capa, informe o progresso e gere uma imagem pronta
+        para compartilhar onde quiser.
+      </p>
+
     </section>
 
+
     <section class="workspace">
+
+      <!-- CONTROLES -->
+
       <aside class="controls">
-        <div class="field">
-          <label for="title">Título do livro</label>
-          <input id="title" type="text" placeholder="Ex.: O Pequeno Príncipe" maxlength="70">
-        </div>
 
         <div class="field">
-          <label for="progress">Progresso <span id="progressValue">65%</span></label>
-          <input id="progress" type="range" min="0" max="100" value="65">
-        </div>
 
-        <div class="field">
-          <label for="cover">Capa do livro</label>
-          <label class="upload">
-            <input id="cover" type="file" accept="image/*">
-            <span class="upload-icon">＋</span>
-            <strong>Escolher imagem</strong>
-            <small>PNG, JPG ou WEBP</small>
+          <label for="title">
+            Título do livro
           </label>
+
+          <input type="text" id="title" placeholder="Ex.: O Pequeno Príncipe" maxlength="70">
+
         </div>
+
 
         <div class="field">
-          <label for="format">Formato</label>
-          <select id="format">
-            <option value="story">Story — 1080 × 1920</option>
-            <option value="square">Quadrado — 1080 × 1080</option>
-          </select>
+
+          <label for="progress">
+
+            Progresso
+
+            <span id="progressValue">
+              65%
+            </span>
+
+          </label>
+
+          <input type="range" id="progress" min="0" max="100" value="65">
+
         </div>
 
-        <button id="download" class="download">Baixar PNG <span>↓</span></button>
-        <button id="reset" class="reset">Limpar</button>
+
+        <div class="field">
+
+          <label for="blur">
+
+            Desfoque do fundo
+
+            <span id="blurValue">
+              25px
+            </span>
+
+          </label>
+
+          <input type="range" id="blur" min="0" max="45" value="25">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="cover">
+            Capa do livro
+          </label>
+
+          <label class="upload">
+
+            <input type="file" id="cover" accept="image/*">
+
+            <span class="upload-icon">
+              ＋
+            </span>
+
+            <strong>
+              Escolher imagem
+            </strong>
+
+            <small>
+              PNG, JPG ou WEBP
+            </small>
+
+          </label>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="format">
+            Formato
+          </label>
+
+          <select id="format">
+
+            <option value="story">
+              Story — 1080 × 1920
+            </option>
+
+            <option value="square">
+              Quadrado — 1080 × 1080
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <button id="download" class="download">
+          Baixar PNG
+          <span>↓</span>
+        </button>
+
+
+        <button id="reset" class="reset">
+          Limpar
+        </button>
+
+
+        <p id="downloadStatus" class="download-status" aria-live="polite"></p>
+
       </aside>
 
+
+      <!-- PRÉVIA -->
+
       <section class="preview-area">
-        <p class="preview-label">PRÉVIA</p>
+
+        <p class="preview-label">
+          PRÉVIA
+        </p>
+
+
         <div id="previewFrame" class="preview-frame story">
+
           <div id="preview" class="card">
+
             <div id="background" class="background"></div>
+
+
             <div class="overlay"></div>
+
+
             <div class="content">
+
               <div class="cover-wrap">
+
                 <img id="coverPreview" src="" alt="Capa do livro">
+
                 <div id="coverPlaceholder" class="cover-placeholder">
                   <span>CAPA</span>
                 </div>
+
               </div>
+
+
               <div class="book-info">
-                <p class="reading-label">MINHA LEITURA ATUAL</p>
-                <h2 id="titlePreview">Seu livro aqui</h2>
+
+                <p class="reading-label">
+                  MINHA LEITURA ATUAL
+                </p>
+
+
+                <h2 id="titlePreview">
+                  Seu livro aqui
+                </h2>
+
+
                 <div class="progress-info">
-                  <span>PROGRESSO</span>
-                  <strong id="percentPreview">65%</strong>
+
+                  <span>
+                    PROGRESSO
+                  </span>
+
+                  <strong id="percentPreview">
+                    65%
+                  </strong>
+
                 </div>
+
+
                 <div class="progress-track">
+
                   <div id="progressBar" class="progress-bar"></div>
+
                 </div>
+
               </div>
+
             </div>
-            <div class="brand">by @menegonlucas</div>
+
+
+            <div class="brand">
+              feito por menegonlucas
+            </div>
+
           </div>
+
         </div>
+
       </section>
+
     </section>
+
   </main>
 
+
   <script src="script.js"></script>
+
 </body>
 
 </html>
